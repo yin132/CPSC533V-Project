@@ -24,7 +24,7 @@ class ClassicGeneticAlgorithm:
         # Compute the fitness value of each chromosomes
         fitness_values = self.compute_fitness(Y)
 
-        print(f"Generation {t}: Best Value: {np.max(fitness_values)} Fitness Values: {fitness_values}")
+        print(f"Generation {t}: Best Value: {np.max(fitness_values)} Average Value: {np.average(fitness_values)} Fitness Values: {fitness_values}")
 
         while t < max:
             # New population
@@ -50,7 +50,7 @@ class ClassicGeneticAlgorithm:
 
             # Compute fitness values of new population
             fitness_values = self.compute_fitness(Y)
-            print(f"Generation {t}: Best Value: {np.max(fitness_values)} Fitness Values: {fitness_values}")
+            print(f"Generation {t}: Best Value: {np.max(fitness_values)} Average Value: {np.average(fitness_values)} Fitness Values: {fitness_values}")
 
     # Returns a set of n chromosomes Y_i (i = 1, 2, ..., n)
     def intialize_chromosomes(self, n):
@@ -68,6 +68,7 @@ class ClassicGeneticAlgorithm:
 
         # Get probabilities
         weights = ranks / np.sum(ranks)
+        # weights = fitness_values / np.sum(fitness_values)
 
         # Selected indices
         indices =  np.random.choice(range(len(fitness_values)), size=2, p=weights, replace=False)
@@ -83,8 +84,16 @@ class ClassicGeneticAlgorithm:
     def crossover(self, C1, C2, C_P):
         if r.random() < C_P:
             # 1-point:
-            point = r.randint(0, len(C1) - 1)
-            O = np.concatenate((C1[:point], C2[point:]))
+            # point = r.randint(0, len(C1) - 1)
+            # O = np.concatenate((C1[:point], C2[point:]))
+
+            # uniform:
+            # random array of true false
+            cross = np.random.choice([True, False], size=len(C2))
+
+            # Combine the
+
+            O = np.where(cross, C1, C2)
 
             return O
         else:

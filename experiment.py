@@ -23,4 +23,4 @@ def compute_chromosome_fitness(C):
     return cartpole.run(chromosome_policy)
 
 ga = ClassicGeneticAlgorithm(chromosome_length, compute_chromosome_fitness)
-ga.run(20, 200, 0.5, 0.01)
+ga.run(200, 1000, 0.1, 0.01)
