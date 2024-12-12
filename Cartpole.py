@@ -21,10 +21,12 @@ class Cartpole:
 
         episode_over = False
         while not episode_over:
-            normalized_observation = self.normalize_observation(observation)
-            binned_observation = self.bin_observation(normalized_observation)
+            # Tabular
+            if self.num_bins != 0:
+                observation = self.normalize_observation(observation)
+                observation = self.bin_observation(observation)
 
-            action = policy(binned_observation)
+            action = policy(observation)
             observation, reward, terminated, truncated, info = self.env.step(action)
 
             total_reward += reward

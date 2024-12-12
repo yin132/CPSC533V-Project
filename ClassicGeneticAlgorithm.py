@@ -63,12 +63,14 @@ class ClassicGeneticAlgorithm:
     def selection(self, Y, fitness_values):
         # ranked selection: Weight by rank not score
 
-        # Get rank of each chromosome
-        ranks = len(fitness_values) - np.argsort(fitness_values)
+        # # Get rank of each chromosome
+        # ranks = len(fitness_values) - np.argsort(fitness_values)
 
-        # Get probabilities
-        weights = ranks / np.sum(ranks)
-        # weights = fitness_values / np.sum(fitness_values)
+        # # Get probabilities
+        # weights = ranks / np.sum(ranks)
+
+        # Use fitness value as weight
+        weights = fitness_values / np.sum(fitness_values)
 
         # Selected indices
         indices =  np.random.choice(range(len(fitness_values)), size=2, p=weights, replace=False)
