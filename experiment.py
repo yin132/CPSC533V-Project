@@ -59,4 +59,4 @@ def compute_chromosome_fitness(C):
     return lunarlander.run(chromosome_policy)
 
 ga = ClassicGeneticAlgorithm(chromosome_length, compute_chromosome_fitness)
-ga.run(200, 1000, 0.3, 0.01)
+ga.run(200, 10, 0.3, 0.01)

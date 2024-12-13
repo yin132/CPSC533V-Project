@@ -1,5 +1,6 @@
 import numpy as np
 
+import matplotlib.pyplot as plt
 import random as r
 
 # Using binary encoding for the chromosome
@@ -9,7 +10,14 @@ class ClassicGeneticAlgorithm:
         # function which takes in a binary encoded chromosome and returns a fitness score
         self.compute_chromosome_fitness = compute_chromosome_fitness
 
-    # Inputs: 
+        self.best_values = np.array([])
+        self.average_values = np.array([])
+        self.medians = np.array([])
+        self.min_values = np.array([])
+        self.lower_quartiles = np.array([])
+        self.upper_quartiles = np.array([])
+
+    # Inputs:
     # - Population size n
     # - Maximum number of iterations MAX
     # Returns:
@@ -51,6 +59,13 @@ class ClassicGeneticAlgorithm:
             # Compute fitness values of new population
             fitness_values = self.compute_fitness(Y)
             print(f"Generation {t}: Best Value: {np.max(fitness_values)} Average Value: {np.average(fitness_values)} Fitness Values: {fitness_values}")
+            self.best_values = np.append(self.best_values, np.max(fitness_values))
+            self.average_values = np.append(self.average_values, np.average(fitness_values))
+            self.min_values = np.append(self.min_values, np.min(fitness_values))
+            self.upper_quartiles = np.append(self.upper_quartiles, np.quantile(fitness_values, 0.75))
+            self.lower_quartiles = np.append(self.lower_quartiles, np.quantile(fitness_values, 0.25))
+            self.medians = np.append(self.medians, np.median(fitness_values))
+        self.plot(max)
 
     # Returns a set of n chromosomes Y_i (i = 1, 2, ..., n)
     def intialize_chromosomes(self, n):
@@ -73,7 +88,7 @@ class ClassicGeneticAlgorithm:
         weights = fitness_values / np.sum(fitness_values)
 
         # Selected indices
-        indices =  np.random.choice(range(len(fitness_values)), size=2, p=weights, replace=False)
+        indices = np.random.choice(range(len(fitness_values)), size=2, p=weights, replace=False)
 
         return Y[indices[0]], Y[indices[1]]
 
@@ -93,8 +108,7 @@ class ClassicGeneticAlgorithm:
             # random array of true false
             cross = np.random.choice([True, False], size=len(C2))
 
-            # Combine the
-
+            # Combine them
             O = np.where(cross, C1, C2)
 
             return O
@@ -117,4 +131,12 @@ class ClassicGeneticAlgorithm:
         else:
             return O
 
-
+    def plot(self, max_generations):
+        plt.plot(np.array(list(range(max_generations))), self.average_values, label='average')
+        plt.plot(np.array(list(range(max_generations))), self.best_values, label='max')
+        plt.plot(np.array(list(range(max_generations))), self.upper_quartiles, label='Q3')
+        plt.plot(np.array(list(range(max_generations))), self.medians, label='median')
+        plt.plot(np.array(list(range(max_generations))), self.lower_quartiles, label='Q1')
+        # plt.plot(np.array(list(range(max_generations))), self.min_values, label='min')
+        plt.legend()
+        plt.show()
